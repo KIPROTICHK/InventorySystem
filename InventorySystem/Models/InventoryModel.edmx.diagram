@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="525e82bae8f340b1b783a1fcae65a6a8" Name="Diagram1" ZoomLevel="47">
+        <EntityTypeShape EntityType="InventorySystemModel.category" Width="1.5" PointX="1" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventorySystemModel.inventoryTransaction" Width="1.875" PointX="0.875" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventorySystemModel.product" Width="1.5" PointX="5.375" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventorySystemModel.productDetail" Width="1.5" PointX="4" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventorySystemModel.purchaseOrder" Width="1.5" PointX="10.375" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventorySystemModel.purchaseOrderLine" Width="1.875" PointX="7.75" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventorySystemModel.saleOrder" Width="1.5" PointX="10.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventorySystemModel.saleOrderLine" Width="1.5" PointX="6.625" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="InventorySystemModel.subCategory" Width="1.5" PointX="3" PointY="0.5" IsExpanded="true" />
+        <AssociationConnector Association="InventorySystemModel.FK_subCategory_category" ManuallyRouted="false" />
+        <AssociationConnector Association="InventorySystemModel.FK_inventoryTransaction_productDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="InventorySystemModel.FK_productDetails_product" ManuallyRouted="false" />
+        <AssociationConnector Association="InventorySystemModel.FK_purchaseOrderLine_productDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="InventorySystemModel.FK_saleOrderLine_productDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="InventorySystemModel.FK_purchaseOrderLine_purchaseOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="InventorySystemModel.FK_saleOrderLine_saleOrderLine" ManuallyRouted="false" />
+        <AssociationConnector Association="InventorySystemModel.FK_product_subCategory" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

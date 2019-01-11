@@ -1,0 +1,595 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="InventorySystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="cid" />
+          </Key>
+          <Property Name="cid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="description" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="inventoryTransaction">
+          <Key>
+            <PropertyRef Name="itID" />
+          </Key>
+          <Property Name="itID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="productDetailsID" Type="int" Nullable="false" />
+          <Property Name="startingQuantity" Type="int" Nullable="false" />
+          <Property Name="currentQuantity" Type="int" Nullable="false" />
+          <Property Name="minimumQuantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="pid" />
+          </Key>
+          <Property Name="pid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="subCategoryID" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="description" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="productDetails">
+          <Key>
+            <PropertyRef Name="pdid" />
+          </Key>
+          <Property Name="pdid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="productID" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="description" Type="text" Nullable="false" />
+          <Property Name="bprice" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="sprice" Type="numeric" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="discountAllowed" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="discountReceived" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="date" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="purchaseOrder">
+          <Key>
+            <PropertyRef Name="poID" />
+          </Key>
+          <Property Name="poID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="supplierNames" Type="varchar" MaxLength="200" />
+          <Property Name="Telno" Type="nchar" MaxLength="15" />
+          <Property Name="description" Type="text" />
+          <Property Name="date" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="purchaseOrderLine">
+          <Key>
+            <PropertyRef Name="polID" />
+          </Key>
+          <Property Name="polID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="purchaseOrderID" Type="int" Nullable="false" />
+          <Property Name="productDetailsID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="buyingPrice" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="saleOrder">
+          <Key>
+            <PropertyRef Name="soID" />
+          </Key>
+          <Property Name="soID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customerNames" Type="varchar" MaxLength="200" />
+          <Property Name="description" Type="text" />
+          <Property Name="date" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="saleOrderLine">
+          <Key>
+            <PropertyRef Name="solID" />
+          </Key>
+          <Property Name="solID" Type="int" Nullable="false" />
+          <Property Name="saleOrderID" Type="int" Nullable="false" />
+          <Property Name="productDetailsID" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="sellingPrice" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="subCategory">
+          <Key>
+            <PropertyRef Name="scid" />
+          </Key>
+          <Property Name="categoryID" Type="int" Nullable="false" />
+          <Property Name="scid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="description" Type="text" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_inventoryTransaction_productDetails">
+          <End Role="productDetails" Type="Self.productDetails" Multiplicity="1" />
+          <End Role="inventoryTransaction" Type="Self.inventoryTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="productDetails">
+              <PropertyRef Name="pdid" />
+            </Principal>
+            <Dependent Role="inventoryTransaction">
+              <PropertyRef Name="productDetailsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_product_subCategory">
+          <End Role="subCategory" Type="Self.subCategory" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="subCategory">
+              <PropertyRef Name="scid" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="subCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_purchaseOrderLine_productDetails">
+          <End Role="productDetails" Type="Self.productDetails" Multiplicity="1" />
+          <End Role="purchaseOrderLine" Type="Self.purchaseOrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="productDetails">
+              <PropertyRef Name="pdid" />
+            </Principal>
+            <Dependent Role="purchaseOrderLine">
+              <PropertyRef Name="productDetailsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_purchaseOrderLine_purchaseOrder">
+          <End Role="purchaseOrder" Type="Self.purchaseOrder" Multiplicity="1" />
+          <End Role="purchaseOrderLine" Type="Self.purchaseOrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="purchaseOrder">
+              <PropertyRef Name="poID" />
+            </Principal>
+            <Dependent Role="purchaseOrderLine">
+              <PropertyRef Name="purchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_saleOrderLine_productDetails">
+          <End Role="productDetails" Type="Self.productDetails" Multiplicity="1" />
+          <End Role="saleOrderLine" Type="Self.saleOrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="productDetails">
+              <PropertyRef Name="pdid" />
+            </Principal>
+            <Dependent Role="saleOrderLine">
+              <PropertyRef Name="productDetailsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_saleOrderLine_saleOrderLine">
+          <End Role="saleOrder" Type="Self.saleOrder" Multiplicity="1" />
+          <End Role="saleOrderLine" Type="Self.saleOrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="saleOrder">
+              <PropertyRef Name="soID" />
+            </Principal>
+            <Dependent Role="saleOrderLine">
+              <PropertyRef Name="saleOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_subCategory_category">
+          <End Role="category" Type="Self.category" Multiplicity="1" />
+          <End Role="subCategory" Type="Self.subCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="cid" />
+            </Principal>
+            <Dependent Role="subCategory">
+              <PropertyRef Name="categoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InventorySystemModelStoreContainer">
+          <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="inventoryTransaction" EntityType="Self.inventoryTransaction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="product" EntityType="Self.product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="productDetails" EntityType="Self.productDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="purchaseOrder" EntityType="Self.purchaseOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="purchaseOrderLine" EntityType="Self.purchaseOrderLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="saleOrder" EntityType="Self.saleOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="saleOrderLine" EntityType="Self.saleOrderLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="subCategory" EntityType="Self.subCategory" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_inventoryTransaction_productDetails" Association="Self.FK_inventoryTransaction_productDetails">
+            <End Role="productDetails" EntitySet="productDetails" />
+            <End Role="inventoryTransaction" EntitySet="inventoryTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_subCategory" Association="Self.FK_product_subCategory">
+            <End Role="subCategory" EntitySet="subCategory" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_purchaseOrderLine_productDetails" Association="Self.FK_purchaseOrderLine_productDetails">
+            <End Role="productDetails" EntitySet="productDetails" />
+            <End Role="purchaseOrderLine" EntitySet="purchaseOrderLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_purchaseOrderLine_purchaseOrder" Association="Self.FK_purchaseOrderLine_purchaseOrder">
+            <End Role="purchaseOrder" EntitySet="purchaseOrder" />
+            <End Role="purchaseOrderLine" EntitySet="purchaseOrderLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_saleOrderLine_productDetails" Association="Self.FK_saleOrderLine_productDetails">
+            <End Role="productDetails" EntitySet="productDetails" />
+            <End Role="saleOrderLine" EntitySet="saleOrderLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_saleOrderLine_saleOrderLine" Association="Self.FK_saleOrderLine_saleOrderLine">
+            <End Role="saleOrder" EntitySet="saleOrder" />
+            <End Role="saleOrderLine" EntitySet="saleOrderLine" />
+          </AssociationSet>
+          <AssociationSet Name="FK_subCategory_category" Association="Self.FK_subCategory_category">
+            <End Role="category" EntitySet="category" />
+            <End Role="subCategory" EntitySet="subCategory" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="InventorySystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="cid" />
+          </Key>
+          <Property Name="cid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="subCategories" Relationship="Self.FK_subCategory_category" FromRole="category" ToRole="subCategory" />
+        </EntityType>
+        <EntityType Name="inventoryTransaction">
+          <Key>
+            <PropertyRef Name="itID" />
+          </Key>
+          <Property Name="itID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="productDetailsID" Type="Int32" Nullable="false" />
+          <Property Name="startingQuantity" Type="Int32" Nullable="false" />
+          <Property Name="currentQuantity" Type="Int32" Nullable="false" />
+          <Property Name="minimumQuantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="productDetail" Relationship="Self.FK_inventoryTransaction_productDetails" FromRole="inventoryTransaction" ToRole="productDetails" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="pid" />
+          </Key>
+          <Property Name="pid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="subCategoryID" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="productDetails" Relationship="Self.FK_productDetails_product" FromRole="product" ToRole="productDetails" />
+          <NavigationProperty Name="subCategory" Relationship="InventorySystemModel.FK_product_subCategory" FromRole="product" ToRole="subCategory" />
+        </EntityType>
+        <EntityType Name="productDetail">
+          <Key>
+            <PropertyRef Name="pdid" />
+          </Key>
+          <Property Name="pdid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="productID" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="bprice" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="sprice" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="discountAllowed" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="discountReceived" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="date" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="inventoryTransactions" Relationship="Self.FK_inventoryTransaction_productDetails" FromRole="productDetails" ToRole="inventoryTransaction" />
+          <NavigationProperty Name="product" Relationship="Self.FK_productDetails_product" FromRole="productDetails" ToRole="product" />
+          <NavigationProperty Name="purchaseOrderLines" Relationship="Self.FK_purchaseOrderLine_productDetails" FromRole="productDetails" ToRole="purchaseOrderLine" />
+          <NavigationProperty Name="saleOrderLines" Relationship="Self.FK_saleOrderLine_productDetails" FromRole="productDetails" ToRole="saleOrderLine" />
+        </EntityType>
+        <EntityType Name="purchaseOrder">
+          <Key>
+            <PropertyRef Name="poID" />
+          </Key>
+          <Property Name="poID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="supplierNames" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Telno" Type="String" MaxLength="15" FixedLength="true" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="date" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="purchaseOrderLines" Relationship="Self.FK_purchaseOrderLine_purchaseOrder" FromRole="purchaseOrder" ToRole="purchaseOrderLine" />
+        </EntityType>
+        <EntityType Name="purchaseOrderLine">
+          <Key>
+            <PropertyRef Name="polID" />
+          </Key>
+          <Property Name="polID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="purchaseOrderID" Type="Int32" Nullable="false" />
+          <Property Name="productDetailsID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="buyingPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="productDetail" Relationship="Self.FK_purchaseOrderLine_productDetails" FromRole="purchaseOrderLine" ToRole="productDetails" />
+          <NavigationProperty Name="purchaseOrder" Relationship="Self.FK_purchaseOrderLine_purchaseOrder" FromRole="purchaseOrderLine" ToRole="purchaseOrder" />
+        </EntityType>
+        <EntityType Name="saleOrder">
+          <Key>
+            <PropertyRef Name="soID" />
+          </Key>
+          <Property Name="soID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customerNames" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="date" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="saleOrderLines" Relationship="Self.FK_saleOrderLine_saleOrderLine" FromRole="saleOrder" ToRole="saleOrderLine" />
+        </EntityType>
+        <EntityType Name="saleOrderLine">
+          <Key>
+            <PropertyRef Name="solID" />
+          </Key>
+          <Property Name="solID" Type="Int32" Nullable="false" />
+          <Property Name="saleOrderID" Type="Int32" Nullable="false" />
+          <Property Name="productDetailsID" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" Nullable="false" />
+          <Property Name="sellingPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="productDetail" Relationship="Self.FK_saleOrderLine_productDetails" FromRole="saleOrderLine" ToRole="productDetails" />
+          <NavigationProperty Name="saleOrder" Relationship="Self.FK_saleOrderLine_saleOrderLine" FromRole="saleOrderLine" ToRole="saleOrder" />
+        </EntityType>
+        <EntityType Name="subCategory">
+          <Key>
+            <PropertyRef Name="scid" />
+          </Key>
+          <Property Name="categoryID" Type="Int32" Nullable="false" />
+          <Property Name="scid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="category" Relationship="Self.FK_subCategory_category" FromRole="subCategory" ToRole="category" />
+          <NavigationProperty Name="products" Relationship="InventorySystemModel.FK_product_subCategory" FromRole="subCategory" ToRole="product" />
+        </EntityType>
+        <Association Name="FK_subCategory_category">
+          <End Role="category" Type="Self.category" Multiplicity="1" />
+          <End Role="subCategory" Type="Self.subCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="cid" />
+            </Principal>
+            <Dependent Role="subCategory">
+              <PropertyRef Name="categoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_inventoryTransaction_productDetails">
+          <End Role="productDetails" Type="Self.productDetail" Multiplicity="1" />
+          <End Role="inventoryTransaction" Type="Self.inventoryTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="productDetails">
+              <PropertyRef Name="pdid" />
+            </Principal>
+            <Dependent Role="inventoryTransaction">
+              <PropertyRef Name="productDetailsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_productDetails_product">
+          <End Role="product" Type="Self.product" Multiplicity="1" />
+          <End Role="productDetails" Type="Self.productDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="pid" />
+            </Principal>
+            <Dependent Role="productDetails">
+              <PropertyRef Name="productID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_purchaseOrderLine_productDetails">
+          <End Role="productDetails" Type="Self.productDetail" Multiplicity="1" />
+          <End Role="purchaseOrderLine" Type="Self.purchaseOrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="productDetails">
+              <PropertyRef Name="pdid" />
+            </Principal>
+            <Dependent Role="purchaseOrderLine">
+              <PropertyRef Name="productDetailsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_saleOrderLine_productDetails">
+          <End Role="productDetails" Type="Self.productDetail" Multiplicity="1" />
+          <End Role="saleOrderLine" Type="Self.saleOrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="productDetails">
+              <PropertyRef Name="pdid" />
+            </Principal>
+            <Dependent Role="saleOrderLine">
+              <PropertyRef Name="productDetailsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_purchaseOrderLine_purchaseOrder">
+          <End Role="purchaseOrder" Type="Self.purchaseOrder" Multiplicity="1" />
+          <End Role="purchaseOrderLine" Type="Self.purchaseOrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="purchaseOrder">
+              <PropertyRef Name="poID" />
+            </Principal>
+            <Dependent Role="purchaseOrderLine">
+              <PropertyRef Name="purchaseOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_saleOrderLine_saleOrderLine">
+          <End Role="saleOrder" Type="Self.saleOrder" Multiplicity="1" />
+          <End Role="saleOrderLine" Type="Self.saleOrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="saleOrder">
+              <PropertyRef Name="soID" />
+            </Principal>
+            <Dependent Role="saleOrderLine">
+              <PropertyRef Name="saleOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InventorySystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="categories" EntityType="Self.category" />
+          <EntitySet Name="inventoryTransactions" EntityType="Self.inventoryTransaction" />
+          <EntitySet Name="products" EntityType="Self.product" />
+          <EntitySet Name="productDetails" EntityType="Self.productDetail" />
+          <EntitySet Name="purchaseOrders" EntityType="Self.purchaseOrder" />
+          <EntitySet Name="purchaseOrderLines" EntityType="Self.purchaseOrderLine" />
+          <EntitySet Name="saleOrders" EntityType="Self.saleOrder" />
+          <EntitySet Name="saleOrderLines" EntityType="Self.saleOrderLine" />
+          <EntitySet Name="subCategories" EntityType="Self.subCategory" />
+          <AssociationSet Name="FK_subCategory_category" Association="Self.FK_subCategory_category">
+            <End Role="category" EntitySet="categories" />
+            <End Role="subCategory" EntitySet="subCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_inventoryTransaction_productDetails" Association="Self.FK_inventoryTransaction_productDetails">
+            <End Role="productDetails" EntitySet="productDetails" />
+            <End Role="inventoryTransaction" EntitySet="inventoryTransactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_productDetails_product" Association="Self.FK_productDetails_product">
+            <End Role="product" EntitySet="products" />
+            <End Role="productDetails" EntitySet="productDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_purchaseOrderLine_productDetails" Association="Self.FK_purchaseOrderLine_productDetails">
+            <End Role="productDetails" EntitySet="productDetails" />
+            <End Role="purchaseOrderLine" EntitySet="purchaseOrderLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_saleOrderLine_productDetails" Association="Self.FK_saleOrderLine_productDetails">
+            <End Role="productDetails" EntitySet="productDetails" />
+            <End Role="saleOrderLine" EntitySet="saleOrderLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_purchaseOrderLine_purchaseOrder" Association="Self.FK_purchaseOrderLine_purchaseOrder">
+            <End Role="purchaseOrder" EntitySet="purchaseOrders" />
+            <End Role="purchaseOrderLine" EntitySet="purchaseOrderLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_saleOrderLine_saleOrderLine" Association="Self.FK_saleOrderLine_saleOrderLine">
+            <End Role="saleOrder" EntitySet="saleOrders" />
+            <End Role="saleOrderLine" EntitySet="saleOrderLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_product_subCategory" Association="InventorySystemModel.FK_product_subCategory">
+            <End Role="subCategory" EntitySet="subCategories" />
+            <End Role="product" EntitySet="products" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_product_subCategory">
+          <End Type="InventorySystemModel.subCategory" Role="subCategory" Multiplicity="1" />
+          <End Type="InventorySystemModel.product" Role="product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="subCategory">
+              <PropertyRef Name="scid" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="subCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="InventorySystemModelStoreContainer" CdmEntityContainer="InventorySystemEntities">
+          <EntitySetMapping Name="categories">
+            <EntityTypeMapping TypeName="InventorySystemModel.category">
+              <MappingFragment StoreEntitySet="category">
+                <ScalarProperty Name="cid" ColumnName="cid" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="inventoryTransactions">
+            <EntityTypeMapping TypeName="InventorySystemModel.inventoryTransaction">
+              <MappingFragment StoreEntitySet="inventoryTransaction">
+                <ScalarProperty Name="itID" ColumnName="itID" />
+                <ScalarProperty Name="productDetailsID" ColumnName="productDetailsID" />
+                <ScalarProperty Name="startingQuantity" ColumnName="startingQuantity" />
+                <ScalarProperty Name="currentQuantity" ColumnName="currentQuantity" />
+                <ScalarProperty Name="minimumQuantity" ColumnName="minimumQuantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="products">
+            <EntityTypeMapping TypeName="InventorySystemModel.product">
+              <MappingFragment StoreEntitySet="product">
+                <ScalarProperty Name="pid" ColumnName="pid" />
+                <ScalarProperty Name="subCategoryID" ColumnName="subCategoryID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="productDetails">
+            <EntityTypeMapping TypeName="InventorySystemModel.productDetail">
+              <MappingFragment StoreEntitySet="productDetails">
+                <ScalarProperty Name="pdid" ColumnName="pdid" />
+                <ScalarProperty Name="productID" ColumnName="productID" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="bprice" ColumnName="bprice" />
+                <ScalarProperty Name="sprice" ColumnName="sprice" />
+                <ScalarProperty Name="discountAllowed" ColumnName="discountAllowed" />
+                <ScalarProperty Name="discountReceived" ColumnName="discountReceived" />
+                <ScalarProperty Name="date" ColumnName="date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="purchaseOrders">
+            <EntityTypeMapping TypeName="InventorySystemModel.purchaseOrder">
+              <MappingFragment StoreEntitySet="purchaseOrder">
+                <ScalarProperty Name="poID" ColumnName="poID" />
+                <ScalarProperty Name="supplierNames" ColumnName="supplierNames" />
+                <ScalarProperty Name="Telno" ColumnName="Telno" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="date" ColumnName="date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="purchaseOrderLines">
+            <EntityTypeMapping TypeName="InventorySystemModel.purchaseOrderLine">
+              <MappingFragment StoreEntitySet="purchaseOrderLine">
+                <ScalarProperty Name="polID" ColumnName="polID" />
+                <ScalarProperty Name="purchaseOrderID" ColumnName="purchaseOrderID" />
+                <ScalarProperty Name="productDetailsID" ColumnName="productDetailsID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="buyingPrice" ColumnName="buyingPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="saleOrders">
+            <EntityTypeMapping TypeName="InventorySystemModel.saleOrder">
+              <MappingFragment StoreEntitySet="saleOrder">
+                <ScalarProperty Name="soID" ColumnName="soID" />
+                <ScalarProperty Name="customerNames" ColumnName="customerNames" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="date" ColumnName="date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="saleOrderLines">
+            <EntityTypeMapping TypeName="InventorySystemModel.saleOrderLine">
+              <MappingFragment StoreEntitySet="saleOrderLine">
+                <ScalarProperty Name="solID" ColumnName="solID" />
+                <ScalarProperty Name="saleOrderID" ColumnName="saleOrderID" />
+                <ScalarProperty Name="productDetailsID" ColumnName="productDetailsID" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="sellingPrice" ColumnName="sellingPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="subCategories">
+            <EntityTypeMapping TypeName="InventorySystemModel.subCategory">
+              <MappingFragment StoreEntitySet="subCategory">
+                <ScalarProperty Name="categoryID" ColumnName="categoryID" />
+                <ScalarProperty Name="scid" ColumnName="scid" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

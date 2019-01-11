@@ -1,0 +1,75 @@
+﻿@model IEnumerable<InventorySystem.Models.productDetail>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.bprice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sprice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.discountAllowed)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.discountReceived)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.product.name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.bprice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sprice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.discountAllowed)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.discountReceived)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.product.name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.pdid }) |
+            @Html.ActionLink("Details", "Details", new { id=item.pdid }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.pdid })
+        </td>
+    </tr>
+}
+
+</table>

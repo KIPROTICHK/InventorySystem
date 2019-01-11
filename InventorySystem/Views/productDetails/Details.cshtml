@@ -1,0 +1,82 @@
+﻿@model InventorySystem.Models.productDetail
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>productDetail</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.bprice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.bprice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sprice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sprice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.discountAllowed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.discountAllowed)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.discountReceived)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.discountReceived)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.product.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.product.name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.pdid }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
