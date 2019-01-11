@@ -40,7 +40,14 @@ namespace InventorySystem.Controllers
         // GET: subCategories/Create
         public ActionResult Create()
         {
-            ViewBag.categoryID = new SelectList(db.categories, "cid", "name");
+            var theTypelist = (from tl in db.categories
+                               orderby (tl.name)
+                               select new
+                               {
+                                   tl.cid,
+                                   tl.name
+                               });
+            ViewBag.categoryID = new SelectList(theTypelist, "cid", "name");
             return View();
         }
 
