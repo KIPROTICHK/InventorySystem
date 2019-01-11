@@ -51,6 +51,13 @@ namespace InventorySystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                //catching unique value error
+                bool IsCategoryNameExist = db.categories.Any
+                (x => x.name == category.name);
+                if (IsCategoryNameExist == true)
+                {
+                    ModelState.AddModelError("name", "Category Name already exists");
+                }
                 db.categories.Add(category);
                 try
                 {
@@ -93,6 +100,13 @@ namespace InventorySystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                //catching unique value error
+                bool IsCategoryNameExist = db.categories.Any
+                (x => x.name == category.name);
+                if (IsCategoryNameExist == true)
+                {
+                    ModelState.AddModelError("name", "Category Name already exists");
+                }
                 db.Entry(category).State = EntityState.Modified;
                 try
                 {
